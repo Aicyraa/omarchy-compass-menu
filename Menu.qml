@@ -1625,6 +1625,7 @@ Item {
         }
 
         Item {
+          id: railHost
           width: parent.width
           height: root.visibleRowsHeight
 
@@ -1683,12 +1684,64 @@ Item {
                 anchors.fill: parent
                 hoverEnabled: true
                 cursorShape: Qt.PointingHandCursor
+                onContainsMouseChanged: {
+                  if (railMouse.containsMouse) {
+                    var pos = railRow.mapToItem(railHost, 0, 0)
+                    railTip.pendingText = railRow.label
+                    railTip.anchorY = pos.y
+                    railTip.anchorH = railRow.height
+                    railTipTimer.restart()
+                  } else {
+                    railTipTimer.stop()
+                    railTip.shown = false
+                  }
+                }
                 onClicked: {
+                  railTipTimer.stop()
+                  railTip.shown = false
                   root.navStack = []
                   root.railFocus = true
                   root.setActiveMenu(railRow.target, false, true)
                 }
               }
+            }
+          }
+
+          Timer {
+            id: railTipTimer
+            interval: 350
+            onTriggered: {
+              railTip.text = railTip.pendingText
+              railTip.shown = true
+            }
+          }
+
+          Rectangle {
+            id: railTip
+            property string text: ""
+            property string pendingText: ""
+            property real anchorY: 0
+            property real anchorH: 0
+            property bool shown: false
+            visible: shown && text.length > 0 && !root.dmenuActive
+            z: 50
+            x: root.railWidth + Style.space(10)
+            y: anchorY + (anchorH - height) / 2
+            width: tipText.implicitWidth + Style.space(16)
+            height: tipText.implicitHeight + Style.space(10)
+            radius: Style.space(6)
+            color: root.background
+            border.width: 1
+            border.color: Util.alpha(root.foreground, 0.25)
+
+            Text {
+              id: tipText
+              textFormat: Text.PlainText
+              text: railTip.text
+              color: root.foreground
+              font.family: root.fontFamily
+              font.pixelSize: Style.font.bodySmall
+              anchors.centerIn: parent
             }
           }
 
