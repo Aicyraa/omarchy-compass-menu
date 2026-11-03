@@ -1612,9 +1612,18 @@ Item {
               height: railModel.count > 0
                 ? Math.max(root.railRowHeight, Math.floor((ListView.view.height - ListView.view.spacing * (railModel.count - 1)) / railModel.count))
                 : root.railRowHeight
-              radius: root.cornerRadius
-              color: !railRow.current ? (railMouse.containsMouse ? Util.alpha(root.foreground, 0.06) : "transparent")
-                : root.railFocused ? root.selectedBackground : Util.alpha(root.foreground, 0.08)
+              color: "transparent"
+
+              Rectangle {
+                id: railChip
+                readonly property int side: Math.min(parent.width, parent.height)
+                width: side
+                height: side
+                anchors.centerIn: parent
+                radius: root.cornerRadius
+                color: !railRow.current ? (railMouse.containsMouse ? Util.alpha(root.foreground, 0.06) : "transparent")
+                  : root.railFocused ? root.selectedBackground : Util.alpha(root.foreground, 0.08)
+              }
 
               Text {
                 id: railIcon
