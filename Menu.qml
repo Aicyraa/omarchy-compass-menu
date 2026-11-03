@@ -133,7 +133,7 @@ Item {
   property int dividerHeight: Style.space(17)
   property bool searchDivider: false
   property int layoutSerial: 0
-  property int railWidth: Style.space(128)
+  property int railWidth: Style.space(52)
   property int railRowHeight: Math.max(Style.space(32), Style.font.body + Style.spacing.rowPaddingX)
   property int footerHeight: 0
   property int cardWidth: Math.min(root.dmenuActive ? Style.space(root.dmenuWidth) : Style.space(620), panel.width - Style.gapsOut * 2)
@@ -1623,26 +1623,8 @@ Item {
                 color: railRow.current ? root.accent : root.foreground
                 opacity: railRow.current ? 1 : 0.7
                 font.family: root.fontFamily
-                font.pixelSize: Style.font.title
-                width: Style.space(28)
-                horizontalAlignment: Text.AlignHCenter
-                anchors.left: parent.left
-                anchors.leftMargin: Style.space(4)
-                anchors.verticalCenter: parent.verticalCenter
-              }
-
-              Text {
-                textFormat: Text.PlainText
-                text: railRow.label
-                color: root.foreground
-                opacity: railRow.current ? 1 : 0.7
-                font.family: root.fontFamily
-                font.pixelSize: Style.font.title
-                elide: Text.ElideRight
-                anchors.left: railIcon.right
-                anchors.right: parent.right
-                anchors.rightMargin: Style.space(8)
-                anchors.verticalCenter: parent.verticalCenter
+                font.pixelSize: Style.font.title + Style.space(4)
+                anchors.centerIn: parent
               }
 
               MouseArea {
