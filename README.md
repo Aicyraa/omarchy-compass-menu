@@ -122,6 +122,12 @@ omarchy plugin disable io.github.aicyraa.compass-menu
 Or restore the `omarchy.menu` entries from a `shell.json` backup. Your recents file can
 be deleted safely.
 
-### License
+### Credits and license
 
-MIT. Copyright © 2026 Aicyraa.
+Compass is based on the default [Omarchy](https://github.com/basecamp/omarchy) menu
+(`omarchy.menu`), © David Heinemeier Hansson, MIT licensed. It keeps Omarchy's menu
+data, dmenu behaviour and shell libraries, and adds the rail, Home, search and hint
+work on top.
+
+MIT. Copyright © 2026 Aicyraa, and © David Heinemeier Hansson for the Omarchy code it
+derives from. See [LICENSE](LICENSE).
