@@ -1567,17 +1567,45 @@ Item {
             }
           }
 
-          Text {
-            textFormat: Text.PlainText
-            visible: !root.dmenuActive && displayModel.count > 0
+          Row {
+            visible: !root.dmenuActive
             anchors.right: parent.right
             anchors.rightMargin: Style.space(12)
             anchors.verticalCenter: parent.verticalCenter
-            text: displayModel.count + (root.filterText ? (displayModel.count === 1 ? " result" : " results") : (displayModel.count === 1 ? " item" : " items"))
-            color: root.foreground
-            opacity: 0.38
-            font.family: root.fontFamily
-            font.pixelSize: Style.font.bodySmall
+            spacing: Style.space(8)
+
+            Text {
+              textFormat: Text.PlainText
+              visible: displayModel.count > 0
+              text: displayModel.count + (root.filterText ? (displayModel.count === 1 ? " result" : " results") : (displayModel.count === 1 ? " item" : " items"))
+              color: root.foreground
+              opacity: 0.38
+              font.family: root.fontFamily
+              font.pixelSize: Style.font.bodySmall
+              anchors.verticalCenter: parent.verticalCenter
+            }
+
+            Rectangle {
+              // Tab swaps between the rail and the list; Esc clears a search.
+              width: keyCap.implicitWidth + Style.space(10)
+              height: keyCap.implicitHeight + Style.space(4)
+              radius: Style.space(4)
+              color: "transparent"
+              border.width: 1
+              border.color: Util.alpha(root.foreground, 0.2)
+              anchors.verticalCenter: parent.verticalCenter
+
+              Text {
+                id: keyCap
+                textFormat: Text.PlainText
+                text: root.filterText ? "esc  clear" : root.railFocused ? "⇥  list" : "⇥  menus"
+                color: root.foreground
+                opacity: 0.45
+                font.family: root.fontFamily
+                font.pixelSize: Style.font.bodySmall
+                anchors.centerIn: parent
+              }
+            }
           }
 
           Text {
@@ -1859,6 +1887,28 @@ Item {
                     text: row.tag
                     color: root.foreground
                     opacity: row.tag === "Remove" ? 0.9 : 0.65
+                    font.family: root.fontFamily
+                    font.pixelSize: Style.font.bodySmall
+                    anchors.centerIn: parent
+                  }
+                }
+
+                Rectangle {
+                  visible: row.hasCursor && !root.dmenuActive
+                  width: enterCap.implicitWidth + Style.space(8)
+                  height: enterCap.implicitHeight + Style.space(2)
+                  radius: Style.space(4)
+                  color: "transparent"
+                  border.width: 1
+                  border.color: Util.alpha(root.selectedText, 0.4)
+                  anchors.verticalCenter: parent.verticalCenter
+
+                  Text {
+                    id: enterCap
+                    textFormat: Text.PlainText
+                    text: "⏎"
+                    color: root.selectedText
+                    opacity: 0.7
                     font.family: root.fontFamily
                     font.pixelSize: Style.font.bodySmall
                     anchors.centerIn: parent
