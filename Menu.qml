@@ -67,6 +67,9 @@ Item {
   property bool rowsLoaded: false
   property string activeMenu: "root"
   property string filterText: ""
+  // A leading ">" limits search to actions and "@" to installed apps.
+  readonly property string searchPrefix: !root.dmenuActive && (root.filterText.charAt(0) === ">" || root.filterText.charAt(0) === "@") ? root.filterText.charAt(0) : ""
+  readonly property string searchQuery: root.searchPrefix ? root.filterText.slice(1) : root.filterText
   property int selectedIndex: 0
   property bool cursorActive: false
   property int requestSerial: 0
@@ -726,10 +729,10 @@ Item {
     root.rebuildRail()
     var scope = root.searchScope()
     var rows = []
-    var query = root.filterText.trim()
+    var query = root.searchQuery.trim()
     root.searchDivider = false
 
-    if (query) {
+    if (root.filterText.trim()) {
       var currentRows = []
       var drilldownRows = []
 
@@ -737,6 +740,8 @@ Item {
         var entry = root.item(root.itemOrder[i])
         if (!entry || entry.id === "root") continue
         if (!root.isDescendantOf(entry.id, scope)) continue
+        if (root.searchPrefix === ">" && entry.kind !== "action") continue
+        if (root.searchPrefix === "@" && entry.kind !== "app") continue
         if (!root.matchesQuery(entry, query)) continue
 
         var detail = root.parentPathFor(entry.id)
@@ -1496,7 +1501,7 @@ Item {
             Text {
               textFormat: Text.PlainText
               visible: !root.filterText && root.crumbs.length === 0
-              text: "Search everything…"
+              text: "Search everything…   > actions   @ apps"
               color: root.foreground
               opacity: 0.52
               font.family: root.fontFamily
@@ -1791,7 +1796,7 @@ Item {
                   readonly property bool marked: root.filterText.length > 0 && !root.dmenuActive
                   textFormat: marked ? Text.StyledText : Text.PlainText
                   width: parent.width
-                  text: marked ? MenuModel.highlightLabel(row.label, root.filterText, String(root.accent)) : row.label
+                  text: marked ? MenuModel.highlightLabel(row.label, root.searchQuery, String(root.accent)) : row.label
                   color: row.hasCursor ? root.selectedText : root.foreground
                   font.family: root.fontFamily
                   font.pixelSize: Style.font.title
