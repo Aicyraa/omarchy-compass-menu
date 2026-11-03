@@ -47,21 +47,18 @@ No extra packages, accounts or network services.
 
 ### Install
 
-Compass replaces the built-in `omarchy.menu`. Clone it, deploy it, then enable it.
-
 ```sh
-git clone https://github.com/Aicyraa/omarchy-compass-menu
-cd omarchy-compass-menu
-python3 deploy.py
-omarchy plugin enable io.github.aicyraa.compass-menu
+omarchy plugin add https://github.com/Aicyraa/omarchy-compass-menu.git --enable
 omarchy restart shell
 ```
 
-The plugin is `keepLoaded`, so a shell restart is needed after every update.
-`deploy.py` only copies files into
-`~/.config/omarchy/plugins/io.github.aicyraa.compass-menu`. It does not edit your
-configuration. The menu has no bar slot, so `shell.json` must list it under
-`plugins`; a plugin with a bar-widget kind that is in neither place gets disabled.
+Compass is built to stand in for the built-in `omarchy.menu`, so your existing keybind,
+bar button and `omarchy menu` calls open it. If the stock menu still appears, turn it
+off: `omarchy plugin disable omarchy.menu`.
+
+Update with `omarchy plugin update io.github.aicyraa.compass-menu`, then
+`omarchy restart shell`. The plugin is `keepLoaded`, so a restart is needed after every
+update.
 
 ### Controls
 
