@@ -1484,22 +1484,49 @@ Item {
               anchors.verticalCenter: parent.verticalCenter
             }
 
-            Text {
-              textFormat: Text.PlainText
+            // Typed text and caret sit in their own row so the caret hugs the
+            // last character instead of inheriting the header's spacing.
+            Row {
               visible: root.filterText.length > 0
-              text: root.filterText
-              color: root.foreground
-              font.family: root.fontFamily
-              font.pixelSize: Style.font.title
+              spacing: Style.space(1)
               anchors.verticalCenter: parent.verticalCenter
-            }
 
-            Rectangle {
-              visible: root.filterText.length > 0
-              width: Style.spacing.hairline + 1
-              height: Style.font.title + 2
-              color: root.accent
-              anchors.verticalCenter: parent.verticalCenter
+              Text {
+                textFormat: Text.PlainText
+                text: root.filterText
+                color: root.foreground
+                font.family: root.fontFamily
+                font.pixelSize: Style.font.title
+                anchors.verticalCenter: parent.verticalCenter
+              }
+
+              Rectangle {
+                id: caret
+                width: Style.spacing.hairline + 1
+                height: Style.font.title + 2
+                color: root.accent
+                anchors.verticalCenter: parent.verticalCenter
+
+                // Solid while typing, then blinks once the keys go quiet.
+                SequentialAnimation on opacity {
+                  id: caretBlink
+                  loops: Animation.Infinite
+                  running: root.filterText.length > 0
+                  PauseAnimation { duration: 500 }
+                  NumberAnimation { to: 0; duration: 80 }
+                  PauseAnimation { duration: 420 }
+                  NumberAnimation { to: 1; duration: 80 }
+                }
+              }
+
+              Connections {
+                target: root
+                function onFilterTextChanged() {
+                  if (!caretBlink.running) return
+                  caretBlink.restart()
+                  caret.opacity = 1
+                }
+              }
             }
 
             Text {
