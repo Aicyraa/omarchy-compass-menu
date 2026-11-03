@@ -4,8 +4,8 @@ from pathlib import Path
 import shutil
 
 source = Path(__file__).resolve().parent
-target = Path.home() / ".config/omarchy/plugins/jee.menu"
-skip = {"deploy.py", "README.md", "test.js", ".git", "__pycache__"}
+target = Path.home() / ".config/omarchy/plugins/io.github.aicyraa.compass-menu"
+skip = {"deploy.py", "README.md", "LICENSE", "test.js", "preview.png", "tools", ".git", "__pycache__"}
 target.mkdir(parents=True, exist_ok=True)
 for path in source.iterdir():
     if path.name not in skip and path.is_file():

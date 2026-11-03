@@ -1145,7 +1145,7 @@ Item {
 
   FileView {
     id: recentFile
-    path: (Quickshell.env("XDG_STATE_HOME") || Quickshell.env("HOME") + "/.local/state") + "/jee-menu-recent.json"
+    path: (Quickshell.env("XDG_STATE_HOME") || Quickshell.env("HOME") + "/.local/state") + "/compass-menu-recent.json"
     printErrors: false
     onLoaded: {
       root.setUsage(MenuModel.parseUsage(text(), Date.now()))

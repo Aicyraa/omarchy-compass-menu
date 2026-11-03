@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "id": "jee.menu",
-  "name": "Menu",
+  "id": "io.github.aicyraa.compass-menu",
+  "name": "Compass",
   "version": "1.0.0",
-  "author": "jee",
-  "description": "The Omarchy menu with a category rail, recents and fuzzy search.",
+  "author": "Aicyraa",
+  "description": "A command menu for Omarchy with a category rail, recents, fuzzy search and keyboard hints.",
   "kinds": [
     "menu",
     "bar-widget"
@@ -15,12 +15,14 @@
     "barWidget": "BarWidget.qml"
   },
   "barWidget": {
-    "displayName": "Menu",
-    "description": "Launches the Omarchy menu",
+    "displayName": "Compass",
+    "description": "Opens the Compass menu",
     "category": "Compositor",
     "allowMultiple": false
   },
   "omarchy": {
     "clonedFrom": "omarchy.menu"
-  }
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/Aicyraa/omarchy-compass-menu"
 }
