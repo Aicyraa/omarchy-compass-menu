@@ -127,7 +127,7 @@ Item {
   property int contentMargin: Style.spacing.panelPadding
   property int headerHeight: Math.max(Style.space(34), Style.font.title + Style.spacing.controlPaddingY * 2)
   property int contentSpacing: Style.spacing.md
-  property int baseRowHeight: Math.max(Style.space(36), Style.font.body + Style.spacing.rowPaddingX)
+  property int baseRowHeight: Math.max(Style.space(34), Style.font.body + Style.spacing.rowPaddingX)
   property int detailRowHeight: Math.max(Style.space(50), Style.font.body + Style.font.caption + Style.spacing.rowPaddingX)
   // How much of the first hidden row stays visible at the fold — enough to
   // read as a cut-off row rather than a bottom border.
@@ -196,7 +196,7 @@ Item {
   // on the home view, where a recent row has come loose from its parent;
   // dmenu rows carry caller-supplied subtext that must always be visible.
   function rowShowsDetail(detail) {
-    return !!((root.filterText || root.dmenuActive || root.activeMenu === "root") && detail)
+    return !!((root.filterText || root.dmenuActive) && detail)
   }
 
   function rowHeightForDetail(detail) {
