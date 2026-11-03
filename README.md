@@ -1,49 +1,127 @@
-# Menu
+<div align="center">
 
-`jee.menu`, a clone of the built-in `omarchy.menu`. The shell routes every
-`omarchy.menu` call here (`clonedFrom`), so keybinds, the bar button,
-`omarchy menu ...` and `omarchy-menu-select` / `-input` all land on this plugin.
+# Compass
 
-## Using it
+A command menu for Omarchy: category rail, recents, fuzzy search and keyboard hints.
 
-- `SUPER + SPACE` opens Home: recents, three toggles and root-level actions
-- `Up` / `Down` on the rail previews a category; `Right`, `Enter` or `Tab` steps in
-- Only `Enter` runs anything. `Right` steps into submenus and does nothing else
-- Toggles flip in place and leave the menu open
-- `Left` or `Backspace` goes back; `Esc` clears the search, then closes
-- Typing from the rail searches everything; typing inside a menu searches that menu
-- `Delete` on a Home row forgets it. In Apps or search it still offers uninstall
-- Click a breadcrumb to jump back up
+<p>
+  <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-yellow.svg"></a>
+  <img alt="Version 1.0.0" src="https://img.shields.io/badge/version-1.0.0-8ab4f8">
+  <img alt="Omarchy Quattro" src="https://img.shields.io/badge/Omarchy-Quattro-a78bfa">
+  <img alt="Quickshell 0.3.2" src="https://img.shields.io/badge/Quickshell-0.3.2-7ee787">
+</p>
 
-## Developing
+[Install](#install) · [Controls](#controls) · [How it works](#how-it-works) · [Development](#development)
 
-Edit here, run `node test.js`, then `python3 deploy.py && omarchy restart shell`.
-The plugin is `keepLoaded`, so hot reload is not enough. Never send `wtype` keys to
-the live menu: it takes the keyboard, so real typing lands in its search.
+<img src="preview.png" width="700" alt="Compass menu showing the category rail, recents and toggles" />
 
-- Items still come from `default/omarchy/omarchy-menu.jsonc` and the user file at
+</div>
+
+---
+
+### Features
+
+| Feature | Description |
+| --- | --- |
+| Category rail | An icon rail down the left lists every top-level menu. Hover an icon for its name. |
+| Home | Recents ranked by use, three toggles and root-level actions in one list. |
+| Fuzzy search | Type anywhere. Matched letters are bold, and a result count sits in the search bar. |
+| Scoped search | Typing from the rail searches everything. Typing inside a menu searches that menu. |
+| Breadcrumbs | Click a crumb to jump back up. |
+| Keyboard hints | The selected row shows a `⏎` cap, and the search bar shows what `Tab` and `Esc` will do. |
+| Empty state | A search with no matches suggests recent items to try. |
+| Shortcuts | Key bindings are read from your Hyprland bindings and shown on the row. |
+| Same routing | Every `omarchy menu`, `omarchy-menu-select` and `omarchy-menu-input` call lands here. |
+
+The menu hangs from the top edge under the bar clock and opens the way the
+control center does: the clock's pill stretches sideways, then drops.
+
+---
+
+### Requirements
+
+- Omarchy Quattro shell and Quickshell `0.3.2`
+- `omarchy` and `python3` on your PATH
+
+No extra packages, accounts or network services.
+
+### Install
+
+Compass replaces the built-in `omarchy.menu`. Clone it, deploy it, then enable it.
+
+```sh
+git clone https://github.com/Aicyraa/omarchy-compass-menu
+cd omarchy-compass-menu
+python3 deploy.py
+omarchy plugin enable io.github.aicyraa.compass-menu
+omarchy restart shell
+```
+
+The plugin is `keepLoaded`, so a shell restart is needed after every update.
+`deploy.py` only copies files into
+`~/.config/omarchy/plugins/io.github.aicyraa.compass-menu`. It does not edit your
+configuration. The menu has no bar slot, so `shell.json` must list it under
+`plugins`; a plugin with a bar-widget kind that is in neither place gets disabled.
+
+### Controls
+
+| Key | Action |
+| --- | --- |
+| `Super` + `Space` | Open Home |
+| `↑` `↓` | Move on the rail or the list |
+| `→` or `Tab` | Step in from the rail |
+| `⏎` | Run the selected row. Only Enter runs anything |
+| `←` or `Backspace` | Go back |
+| `Esc` | Clear the search, then close |
+| `Delete` | Forget a Home row. In Apps or search it offers uninstall |
+| Type | Search |
+
+Toggles flip in place and leave the menu open.
+
+---
+
+### How it works
+
+- Items come from `default/omarchy/omarchy-menu.jsonc` and your
   `~/.config/omarchy/extensions/omarchy-menu.jsonc`.
-- Use counts live in `~/.local/state/jee-menu-recent.json`, fading with a one-week
-  half-life. `system.*` and `remove.*` are never recorded. Only menu use counts:
-  a keybind that runs a command directly never passes through here.
-- Shortcut hints come from parsing `default/hypr/bindings/*.lua` and the user's
-  `bindings.lua`. Stock toggles have no state, so `TOGGLE_GUARDS` adds it for three.
-- The menu hangs from the top edge under the bar clock and opens the way the control
-  center does: the clock's pill stretches sideways, then drops, and closing runs that
-  backwards. The numbers are the control center's, so change them in both. There is no
-  scrim, and the blur comes from the `omarchy-menu` layer rule in
-  `~/.config/hypr/looknfeel.lua`.
-- Apps come from the menu's own `AppLibrary`, not `shell.appLibrary`. The shell never
-  gives a clone its library: `manifestHasKind` fails on the manifest it gets from the
-  panel model. If `childCount apps` is 0, that path is the first thing to check.
-- Dmenu mode keeps the stock narrow card, centered. About 20 Omarchy scripts depend on it.
-- This is a copy, so upstream fixes to `omarchy.menu` do not arrive by themselves.
-  Compare against `/usr/share/omarchy/shell/plugins/menu/` after updates.
+- Use counts live in `~/.local/state/compass-menu-recent.json` and fade with a
+  one-week half-life. `system.*` and `remove.*` are never recorded. Only use through
+  this menu counts: a keybind that runs a command directly never passes through it.
+- Shortcut hints come from parsing `default/hypr/bindings/*.lua` and your
+  `bindings.lua`.
+- Apps come from the menu's own `AppLibrary`, because the shell never gives a cloned
+  plugin its library. If `childCount apps` is 0, check that first.
+- Dmenu mode keeps the stock narrow card. About 20 Omarchy scripts depend on it.
+- Compass is a copy of `omarchy.menu`, so upstream fixes do not arrive by themselves.
+  Compare against `/usr/share/omarchy/shell/plugins/menu/` after Omarchy updates.
 
-The menu is not on the bar, so `shell.json` must list it under `plugins`. A plugin
-with a bar-widget kind that is in neither place gets disabled.
+### Development
 
-## Removing it
+```sh
+node test.js                          # model tests
+python3 deploy.py && omarchy restart shell
+bash tools/preview/render.sh          # regenerate preview.png
+```
 
-`omarchy plugin disable jee.menu`, or restore the `.bak-menu-*` copy of
-`~/.config/omarchy/shell.json`.
+Never send `wtype` keys to the live menu: it takes the keyboard, so real typing lands
+in its search and an injected key can run a result.
+
+### Preview image
+
+`preview.png` is rendered from the production `Menu.qml` in a throwaway Quickshell
+config (`tools/preview/render.sh`). It has no keyboard focus, a neutral gradient in
+place of the desktop, and sample recents that contain no applications. It does not read
+or write your Omarchy configuration or state, and it is not installed by `deploy.py`.
+
+### Removing it
+
+```sh
+omarchy plugin disable io.github.aicyraa.compass-menu
+```
+
+Or restore the `omarchy.menu` entries from a `shell.json` backup. Your recents file can
+be deleted safely.
+
+### License
+
+MIT. Copyright © 2026 Aicyraa.
