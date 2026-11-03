@@ -1761,19 +1761,19 @@ Item {
                 color: row.hasCursor ? root.selectedText : root.foreground
                 font.family: row.iconFont.length > 0 ? row.iconFont : root.fontFamily
                 font.pixelSize: Style.font.title
-                width: Style.space(28)
+                width: Style.space(32)
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 anchors.left: parent.left
                 anchors.leftMargin: root.rowReservedBorderLeft + Style.space(8)
-                y: contentColumn.y + labelText.y + (labelText.height - height) / 2
+                anchors.verticalCenter: parent.verticalCenter
               }
 
               Image {
                 id: appIconImage
                 visible: row.isApp
-                width: Style.font.title + Style.space(4)
-                height: Style.font.title + Style.space(4)
+                width: Style.font.title + Style.space(10)
+                height: Style.font.title + Style.space(10)
                 fillMode: Image.PreserveAspectFit
                 // Decode at physical pixels — a logical-size decode leaves
                 // PNG icons upscaled and blurry on HiDPI displays.
@@ -1782,8 +1782,8 @@ Item {
                 source: row.isApp && root.appLibrary ? root.appLibrary.iconSource(row.appIcon) : ""
                 asynchronous: true
                 anchors.left: parent.left
-                anchors.leftMargin: root.rowReservedBorderLeft + Style.space(8) + (Style.space(28) - width) / 2
-                y: contentColumn.y + labelText.y + (labelText.height - height) / 2
+                anchors.leftMargin: root.rowReservedBorderLeft + Style.space(8) + (Style.space(32) - width) / 2
+                anchors.verticalCenter: parent.verticalCenter
               }
 
               Column {
@@ -1824,7 +1824,7 @@ Item {
                 id: trail
                 anchors.right: parent.right
                 anchors.rightMargin: root.rowReservedBorderRight + Style.space(8)
-                y: contentColumn.y + labelText.y + (labelText.height - height) / 2
+                anchors.verticalCenter: parent.verticalCenter
                 spacing: Style.space(8)
 
                 Text {
