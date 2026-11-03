@@ -548,6 +548,15 @@ Item {
     return root.item(root.activeMenu) ? root.activeMenu : "root"
   }
 
+  function recentLabels(limit) {
+    var out = []
+    for (var i = 0; i < root.recentIds.length && out.length < limit; i++) {
+      var entry = root.item(root.recentIds[i])
+      if (entry && entry.id !== "root" && root.isVisible(entry)) out.push(entry.label)
+    }
+    return out
+  }
+
   function homeRows() {
     var rows = []
     for (var i = 0; i < root.recentIds.length; i++) {
@@ -1952,6 +1961,62 @@ Item {
               font.pixelSize: Style.font.title
               horizontalAlignment: Text.AlignHCenter
               width: Style.space(320)
+            }
+
+            Item {
+              visible: root.filterText.length > 0 && !root.dmenuActive && emptyChips.count > 0
+              width: Style.space(320)
+              height: chipRow.height + Style.space(4)
+
+              Row {
+                id: chipRow
+                anchors.horizontalCenter: parent.horizontalCenter
+                spacing: Style.space(6)
+
+                Text {
+                  textFormat: Text.PlainText
+                  text: "Try"
+                  color: root.foreground
+                  opacity: 0.45
+                  font.family: root.fontFamily
+                  font.pixelSize: Style.font.bodySmall
+                  anchors.verticalCenter: parent.verticalCenter
+                }
+
+                Repeater {
+                  id: emptyChips
+                  model: root.recentLabels(3)
+
+                  Rectangle {
+                    required property string modelData
+                    width: chipText.implicitWidth + Style.space(14)
+                    height: chipText.implicitHeight + Style.space(8)
+                    radius: Style.space(4)
+                    color: chipMouse.containsMouse ? Util.alpha(root.foreground, 0.08) : "transparent"
+                    border.width: 1
+                    border.color: Util.alpha(root.foreground, 0.22)
+
+                    Text {
+                      id: chipText
+                      textFormat: Text.PlainText
+                      text: parent.modelData
+                      color: root.foreground
+                      opacity: 0.75
+                      font.family: root.fontFamily
+                      font.pixelSize: Style.font.bodySmall
+                      anchors.centerIn: parent
+                    }
+
+                    MouseArea {
+                      id: chipMouse
+                      anchors.fill: parent
+                      hoverEnabled: true
+                      cursorShape: Qt.PointingHandCursor
+                      onClicked: root.setFilter(parent.modelData)
+                    }
+                  }
+                }
+              }
             }
           }
           }
